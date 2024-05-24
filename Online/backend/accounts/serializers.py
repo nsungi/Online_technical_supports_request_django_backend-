@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from . models import User
+from . models import User, Location, ServiceRequest, Message
+
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -26,3 +27,30 @@ class UserDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = User 
         fields = ['email', 'password', 'name']
+        
+        
+#Location
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = ['id', 'latitude', 'longitude', 'address', 'timestamp']
+
+
+
+
+# Services request
+
+class ServiceRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceRequest
+        fields = '__all__'
+        
+        
+        
+# Message
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ['id', 'sender_name', 'text', 'created_at']

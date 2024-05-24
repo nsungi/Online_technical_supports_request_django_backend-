@@ -22,6 +22,19 @@ class Profile(models.Model):
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True)
     
 
+
+class ServiceRequest(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    issue_description = models.TextField()
+    file = models.FileField(upload_to='service_requests/', null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+
 class Service(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
@@ -54,24 +67,38 @@ class TechnicalRequest(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-
-class Notification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    message = models.TextField()
+# Messaging
+    
+class Message(models.Model):
+    sender_name = models.CharField(max_length=100)
+    text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-
-class Conversation(models.Model):
-    sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
-    recipient = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
-    message = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.text
+    
+    
 
 class FileAttachment(models.Model):
     support_request = models.ForeignKey(TechnicalRequest, on_delete=models.CASCADE)
     file = models.FileField(upload_to='attachments/')
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    
+  
+  
+# Location
+    
+class Location(models.Model):
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    address = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.address} ({self.latitude}, {self.longitude})"  
+
+
 
 class Feedback(models.Model):
     support_request = models.OneToOneField(TechnicalRequest, on_delete=models.CASCADE)

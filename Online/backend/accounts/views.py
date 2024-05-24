@@ -1,9 +1,14 @@
 from rest_framework.response import Response
 from rest_framework import generics, status
+from rest_framework import generics 
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
-from . serializers import UserRegistrationSerializer, UserLoginSerializer, UserDetailsSerializer
+from .models import Location, ServiceRequest, Message
 from . utils import Utils
+
+from . serializers import ( UserRegistrationSerializer, UserLoginSerializer, UserDetailsSerializer, 
+                            LocationSerializer, ServiceRequestSerializer, MessageSerializer)
+
 
 
 class UserRegistrationAPIView(generics.GenericAPIView):
@@ -48,3 +53,28 @@ class GetUserDetailsAPIView(generics.GenericAPIView):
     def get(self, request):
         serializer = UserDetailsSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK) 
+
+
+
+#location
+
+class LocationCreateView(generics.CreateAPIView):
+    queryset = Location.objects.all()
+    serializer_class = LocationSerializer
+
+
+
+
+# Service request
+
+class ServiceRequestCreate(generics.CreateAPIView):
+    queryset = ServiceRequest.objects.all()
+    serializer_class = ServiceRequestSerializer
+    
+    
+# Message
+
+class MessageListCreate(generics.ListCreateAPIView):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+    
